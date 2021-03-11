@@ -1,0 +1,16 @@
+{
+  "name": "filesystem-test",
+  "version": "1.0.0",
+  "description": "filesystem for generating images with different sizes",
+  "main": "./src/server.js",
+  "author": "krime",
+  "license": "MIT",
+  "scripts": {
+    "watch": "nodemon ./src/server.js"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7"
+  }
+}
