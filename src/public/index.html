@@ -15,8 +15,17 @@
     </style>
   </head>
   <body>
-    <div class="container"></div>
+    <div class="container">
+      <form action="/upload" enctype="multipart/form-data" method="post">
+        <div>
+          <label>Select your profile picture:</label>
+          <input type="file" name="file" />
+        </div>
+        <div>
+          <input type="submit" value="Upload" />
+        </div>
+      </form>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-    <script src="./assets/js/main.js" type="module"></script>
   </body>
 </html>
