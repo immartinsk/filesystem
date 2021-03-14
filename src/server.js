@@ -40,17 +40,47 @@ app.use(express.static('src/public'));
 
 app.post('/upload', upload.single('file'), (req, res) => {
   try {
-    res.status(200);
     log(prefix, chalk.blue(`File uploaded successfully`));
     const file = req.file;
     const removeExtension = file.originalname.split('.').shift();
     const extension = '.webp';
+    const dir = 'uploads/img';
+    const thumbPath = `./${removeExtension}-t.webp`;
+    const heroPath = `./${removeExtension}-h.webp`;
+    const newHeroPath = `./uploads/img/hero/${removeExtension}.webp`;
+    const newThumbPath = `./uploads/img/thumb/${removeExtension}.webp`;
+
+    if (fs.existsSync(dir)) {
+      log(chalk.blue(prefix, 'Directory found'));
+    } else {
+      log(chalk.red('Directory not found'));
+      log(chalk.blue(prefix, 'Creating necessary directory.'));
+      fs.mkdirSync(dir);
+    }
+
     sharp(file.path)
       .resize(640, 360)
       .toFile(`${removeExtension}${extension}`, (err, info) => {
         if (err) return new Error(err);
-        console.log(info);
+        fs.rename(thumbPath, newThumbPath, (err) => {
+          if (err) throw err;
+        });
       });
+
+    sharp(file.path)
+      .resize(1280, 720)
+      .toFile(`${removeExtension}${extension}`, (err, info) => {
+        if (err) return new Error(err);
+        fs.rename(heroPath, newHeroPath, (err) => {
+          if (err) throw err;
+        });
+      });
+
+    setTimeout(function () {
+      fs.unlinkSync(file.path);
+      log(prefix, chalk.yellow('All files have been moved.'));
+      log(prefix, chalk.yellow('Original file has been deleted.'));
+    }, 1000);
   } catch (error) {
     if (error) {
       log(prefix, chalk.red.bold('There has been a problem.'));
